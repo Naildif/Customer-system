@@ -4,7 +4,7 @@ public class CustomerDTO {
     private Long id;
     private int age;
     private String name;
-    private String number;
+    private String phoneNumber;
 
     public Long getId() {
         return id;
@@ -30,11 +30,11 @@ public class CustomerDTO {
         this.name = name;
     }
 
-    public String getNumber() {
-        return number;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }
