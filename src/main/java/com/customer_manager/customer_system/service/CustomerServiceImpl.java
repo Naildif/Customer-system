@@ -1,5 +1,6 @@
 package com.customer_manager.customer_system.service;
 
+import com.customer_manager.customer_system.controller.CustomerNotFoundException;
 import com.customer_manager.customer_system.dto.CustomerDTO;
 import com.customer_manager.customer_system.entity.Customer;
 import com.customer_manager.customer_system.repository.CustomerRepository;
@@ -21,40 +22,46 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     public CustomerDTO getCustomerById(Long id) {
         Optional<Customer> customer =customerRepository.findById(id);
-        return customer.map(this::convertEntityToDTO).orElse(null);
+        return customer.map(this::convertEntityToDTO)
+                .orElseThrow(()-> new CustomerNotFoundException("Customer with ID "+ id
+                        + " not found \n૮ ◞ ﻌ ◟ ა"));
     }
 
     @Override
     public List<CustomerDTO> getAllCustomers() {
         List<Customer> customers = customerRepository.findAll();
-        return customers.stream().map(this::convertEntityToDTO).collect(Collectors.toList());
+        return
+                customers.stream().map(this::convertEntityToDTO).collect(Collectors.toList());
     }
 
     @Override
     public CustomerDTO createCustomer(CustomerDTO customerDTO){
         Customer customer = convertDTOToEntity(customerDTO);
-
         Customer savedCustomer = customerRepository.save(customer);
         return convertEntityToDTO(savedCustomer);
     }
 
     @Override
     public CustomerDTO updateCustomer(Long id, CustomerDTO customerDTO) {
-        Optional<Customer> existingCustomer = customerRepository.findById(id);
-        if (existingCustomer.isPresent()) {
-            Customer customerToUpdate = existingCustomer.get();
-            customerToUpdate.setName(customerDTO.getName());
-            customerToUpdate.setAge(customerDTO.getAge());
-            customerToUpdate.setPhoneNumber(customerDTO.getPhoneNumber());
-            Customer updatedCustomer = customerRepository.save(customerToUpdate);
-            return convertEntityToDTO(updatedCustomer);
-        }
-        return null;
+        Customer existingCustomer = customerRepository.findById(id)
+                .orElseThrow(()-> new CustomerNotFoundException("Customer with ID "+ id
+                        + " not found \n૮꒰◞ ˕ ◟꒱ა"));
+        existingCustomer.setName(customerDTO.getName());
+        existingCustomer.setAge(customerDTO.getAge());
+        existingCustomer.setPhoneNumber(customerDTO.getPhoneNumber());
+
+        Customer updatedCustomer = customerRepository.save(existingCustomer);
+        return convertEntityToDTO(updatedCustomer);
+
     }
 
     @Override
     public void deleteCustomer(Long id) {
-        customerRepository.deleteById(id);
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(()-> new CustomerNotFoundException("Customer with ID "+ id
+                        + " not found \n૮ ◞ ﻌ ◟ ა"));
+
+        customerRepository.delete(customer);
     }
 
     private CustomerDTO convertEntityToDTO(Customer customer) {
