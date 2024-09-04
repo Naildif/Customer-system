@@ -3,10 +3,12 @@ package com.customer_manager.customer_system.controller;
 import com.customer_manager.customer_system.dto.CustomerDTO;
 import com.customer_manager.customer_system.repository.CustomerRepository;
 import com.customer_manager.customer_system.service.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -36,13 +38,14 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerDTO customerDTO) {
+    public ResponseEntity<CustomerDTO> createCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
         CustomerDTO createdCustomer = customerService.createCustomer(customerDTO);
-        return ResponseEntity.ok(createdCustomer);
+        URI location = URI.create(String.format("/customer/%d", createdCustomer.getId()));
+        return ResponseEntity.created(location).body(createdCustomer);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Long id,@Valid @RequestBody CustomerDTO customerDTO) {
         CustomerDTO updatedCustomer = customerService.updateCustomer(id, customerDTO);
         if (updatedCustomer != null) {
             return ResponseEntity.ok(updatedCustomer);

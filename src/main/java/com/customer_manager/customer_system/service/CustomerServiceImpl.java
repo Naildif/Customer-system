@@ -1,11 +1,12 @@
 package com.customer_manager.customer_system.service;
 
-import com.customer_manager.customer_system.controller.CustomerNotFoundException;
+import com.customer_manager.customer_system.exception.CustomerNotFoundException;
 import com.customer_manager.customer_system.dto.CustomerDTO;
 import com.customer_manager.customer_system.entity.Customer;
 import com.customer_manager.customer_system.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 import java.util.Optional;

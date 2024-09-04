@@ -1,9 +1,15 @@
 package com.customer_manager.customer_system.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class CustomerDTO {
     private Long id;
     private int age;
+    @NotNull
+    @Size(min=2, max=50)
     private String name;
+    @NotNull
     private String phoneNumber;
 
     public Long getId() {
