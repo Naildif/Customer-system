@@ -3,15 +3,20 @@ package com.customer_manager.customer_system.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "customer", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "name"),
+        @UniqueConstraint(columnNames = "phoneNumber")
+})
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
-    private int age;
+    @Column(name = "name", unique = true)
     private String name;
+    @Column(name = "phoneNumber", unique = true)
     private String phoneNumber;
+    private int age;
 
     public Customer(){ }
 

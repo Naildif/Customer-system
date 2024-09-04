@@ -10,6 +10,7 @@ public class CustomerDTO {
     @Size(min=2, max=50)
     private String name;
     @NotNull
+    @Size(min=10, max=13)
     private String phoneNumber;
 
     public Long getId() {
